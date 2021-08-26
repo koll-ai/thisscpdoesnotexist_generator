@@ -12,10 +12,8 @@ url_poll = "https://thisscpdoesnotexist.pythonanywhere.com/get_poll/"
 r = requests.get(url_poll)
 polls = r.json()['poll']
 
-# Get winner
-newlist = list(reversed(sorted(polls, key=lambda k: k['votes'])))
 
-if len(newlist) == 0:
+if len(polls) == 0:
     print("nothing to generate")
     next_time = str(int(time.time() + 3600))
     PARAMS = {'key': resetkey,
@@ -24,6 +22,11 @@ if len(newlist) == 0:
     r = requests.get(url="http://thisscpdoesnotexist.pythonanywhere.com/next_round/", params=PARAMS)
 
     exit(0)
+
+# Get winner
+newlist = list(reversed(sorted(polls, key=lambda k: k['votes'])))
+
+
 
 win = newlist[0]
 
