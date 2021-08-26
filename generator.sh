@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 python3 generate_scp.py
-git add raw_scp/*
+
+cd $HOME/SCP-GPT_db/
+
+git add *
 git commit -m "added new SCP-GPT"
 git pull
 git push
+
+cd $HOME/SCP-tsde_scp_gen/
