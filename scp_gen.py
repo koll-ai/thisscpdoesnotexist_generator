@@ -1,5 +1,6 @@
 import openai
 import sys
+import re
 
 object_classes = ['Safe', 'Euclid', 'Keter', 'Thaumiel']
 stops = ['\nItem #:', '\nDescription:', '\nAddendum', '\nRecovery:']
@@ -45,3 +46,12 @@ def generate_scp(scp_number, description, object_class):
     ret = req_complete(prompt, 600)
 
     return prompt
+
+def toHTML(text):
+    text = re.sub(r"^(.*):",r"<h3>\1:</h3>",text)
+    text = re.sub(r"\n\n(.*):",r"\n\n<h3>\1:</h3>",text)
+    text = re.sub(r"SCP\-([0-9]*)\-GPT", r"<i>SCP-\1-GPT</i>", text)
+
+    text = "<div class='justifier'>" + text + "</div>"
+    text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
+    return text
