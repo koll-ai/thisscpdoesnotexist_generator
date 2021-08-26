@@ -6,7 +6,9 @@ object_classes = ['Safe', 'Euclid', 'Keter', 'Thaumiel']
 stops = ['\nItem #:', '\nDescription:', '\nAddendum', '\nRecovery:']
 
 def connect():
-    openai.api_key = open("openai.key", "r").read()
+    key = open("openai.key", "r").read()
+    print(key)
+    openai.api_key = key
 
 def req_complete(prompt, max_tokens):
     text = openai.Completion.create(
