@@ -28,7 +28,7 @@ prompt = raw_prompt[raw_prompt.index('GPT') + 7:]
 
 url_poll = "https://thisscpdoesnotexist.pythonanywhere.com/current_scp_number/"
 r = requests.get(url_poll)
-scp_num = int(r.text)
+scp_num = r.text
 
 # generate scp
 scp = scp_gen.generate_scp(scp_num, prompt, class_to_num[win['scpClass']])
