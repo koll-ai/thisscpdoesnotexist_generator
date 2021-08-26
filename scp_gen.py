@@ -40,10 +40,10 @@ def generate_scp(scp_number, description, object_class):
     prompt += ret + "\n\nRecovery:"
     ret = req_complete(prompt, 600)
 
-    prompt += ret + "\n\nAddendum 1:"
+    prompt += ret + "\n\nAddendum " + str(scp_number) +".1:"
     ret = req_complete(prompt, 600)
 
-    prompt += ret + "\n\nAddendum 2:"
+    prompt += ret + "\n\nAddendum" + str(scp_number) +".2:"
     ret = req_complete(prompt, 600)
 
     prompt += ret

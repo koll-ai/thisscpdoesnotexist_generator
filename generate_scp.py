@@ -48,8 +48,11 @@ with open("../SCP-GPT_db/scp_list.csv", 'a') as f:
     writer.writerow([raw_prompt, win['scpClass'], filename])
 f.close()
 
-next_time = time.time() + 3600
-r = requests.get("https://thisscpdoesnotexist.pythonanywhere.com/next_round/?k=" + resetkey + "&?nt=" + str(next_time))
+next_time = str(int(time.time() + 3600))
+PARAMS = {'key': resetkey,
+         'next_time' : next_time}
+  
+r = requests.get(url = "https://thisscpdoesnotexist.pythonanywhere.com/next_round/", params = PARAMS)
 
 if __name__ == '__main__':
     pass
