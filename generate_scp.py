@@ -4,6 +4,9 @@ import time
 import csv
 import openai
 
+resetkey = open("reset.key", "r").read().rstrip()
+
+
 # Get all polls
 url_poll = "https://thisscpdoesnotexist.pythonanywhere.com/get_poll/"
 r = requests.get(url_poll)
@@ -13,6 +16,12 @@ polls = r.json()['poll']
 newlist = list(reversed(sorted(polls, key=lambda k: k['votes'])))
 
 if len(newlist) == 0:
+    next_time = str(int(time.time() + 3600))
+    PARAMS = {'key': resetkey,
+              'next_time': next_time}
+
+    r = requests.get(url="http://thisscpdoesnotexist.pythonanywhere.com/next_round/", params=PARAMS)
+
     exit(0)
 
 win = newlist[0]
@@ -21,7 +30,6 @@ win = newlist[0]
 object_classes = ['Safe', 'Euclid', 'Keter', 'Thaumiel']
 class_to_num = {c : i for i,c in enumerate(object_classes)}
 
-resetkey = open("reset.key", "r").read().rstrip()
 
 # prepare inputs
 raw_prompt = win['prompt']
