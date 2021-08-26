@@ -31,7 +31,12 @@ r = requests.get(url_poll)
 scp_num = r.text
 
 # generate scp
-scp = scp_gen.generate_scp(scp_num, prompt, class_to_num[win['scpClass']])
+print("==============DEBUG=========================================")
+print(scp_num)
+print(prompt)
+print("============================================================")
+
+scp = scp_gen.generate_scp(scp_num, prompt, win['scpClass'])
 scp = scp_gen.toHTML(scp)
 
 # save scp
