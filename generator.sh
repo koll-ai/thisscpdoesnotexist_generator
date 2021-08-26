@@ -8,5 +8,3 @@ git add *
 git commit -m "added new SCP-GPT"
 git pull
 git push
-
-cd $HOME/SCP-tsde_scp_gen/

@@ -49,7 +49,7 @@ with open("../SCP-GPT_db/scp_list.csv", 'a') as f:
 f.close()
 
 next_time = time.time() + 3600
-r = requests.get("https://thisscpdoesnotexist.pythonanywhere.com/get_poll/?k=" + resetkey + "&?nt=" + str(next_time))
+r = requests.get("https://thisscpdoesnotexist.pythonanywhere.com/next_round/?k=" + resetkey + "&?nt=" + str(next_time))
 
 if __name__ == '__main__':
     pass
