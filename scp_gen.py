@@ -9,6 +9,7 @@ def connect():
     key = open("openai.key", "r").read()
     print(key)
     openai.api_key = key
+    print("connected to openAI")
 
 def req_complete(prompt, max_tokens):
     text = openai.Completion.create(
