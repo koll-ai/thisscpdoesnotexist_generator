@@ -32,19 +32,21 @@ def generate_scp(scp_number, description, object_class):
         + 'Item #: ' + 'SCP-' + scp_number + '-GPT\n\n' \
         + 'Object Class: ' + object_class + '\n\n' \
         + 'Special Containment Procedures: '
+    ret = req_complete(prompt, 300)
 
-    print(prompt)
-
-    ret = req_complete(prompt, 100)
     prompt += ret + "\n\nDescription:"
+    ret = req_complete(prompt, 1000)
 
+    prompt += ret + "\n\nRecovery:"
     ret = req_complete(prompt, 600)
-    prompt += ret + "\n\nDiscovery:"
 
-    ret = req_complete(prompt, 600)
     prompt += ret + "\n\nAddendum 1:"
+    ret = req_complete(prompt, 600)
 
-    prompt += ret + req_complete(prompt, 600)
+    prompt += ret + "\n\nAddendum 2:"
+    ret = req_complete(prompt, 600)
+
+    prompt += ret
 
     return prompt
 
@@ -52,6 +54,7 @@ def toHTML(text):
     text = re.sub(r"^(.*):",r"<h3>\1:</h5>",text)
     text = re.sub(r"\n\n(.*):",r"\n\n<h5>\1:</h5>",text)
     text = re.sub(r"SCP\-([0-9]*)\-GPT", r"<i>SCP-\1-GPT</i>", text)
+    text = re.sub("\n", "<br>", text)
 
     text = "<div class='justifier'>" + text + "</div>"
     text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
