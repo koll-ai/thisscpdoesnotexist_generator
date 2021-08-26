@@ -33,22 +33,17 @@ print(scp_num)
 print(prompt)
 print("============================================================")
 
-
-key = open("openai.key", "r").read()
-openai.api_key = key
-print("connected to openAI")
-
-
+scp_gen.connect()
 scp = scp_gen.generate_scp(scp_num, prompt, win['scpClass'])
 scp = scp_gen.toHTML(scp)
 
 # save scp
 filename = 'SCP-' + scp_num + '-GPT.txt'
-with open("../SPC-GPT_db/" + filename, 'w+') as f:
+with open("../SCP-GPT_db/" + filename, 'w+') as f:
     f.write(scp)
 f.close()
 
-with open("../SPC-GPT_db/scp_list.csv", 'a') as f:
+with open("../SCP-GPT_db/scp_list.csv", 'a') as f:
     writer = csv.writer(f)
     writer.writerow([raw_prompt, win['scpClass'], filename])
 f.close()

@@ -6,8 +6,7 @@ object_classes = ['Safe', 'Euclid', 'Keter', 'Thaumiel']
 stops = ['\nItem #:', '\nDescription:', '\nAddendum', '\nRecovery:']
 
 def connect():
-    key = open("openai.key", "r").read()
-    print(key)
+    key = open("openai.key", "r").read().rstrip()
     openai.api_key = key
     print("connected to openAI")
 
