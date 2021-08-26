@@ -2,6 +2,7 @@ import requests
 import scp_gen
 import time
 import csv
+import openai
 
 # Get all polls
 url_poll = "https://thisscpdoesnotexist.pythonanywhere.com/get_poll/"
@@ -32,7 +33,12 @@ print(scp_num)
 print(prompt)
 print("============================================================")
 
-scp_gen.connect()
+
+key = open("openai.key", "r").read()
+openai.api_key = key
+print("connected to openAI")
+
+
 scp = scp_gen.generate_scp(scp_num, prompt, win['scpClass'])
 scp = scp_gen.toHTML(scp)
 
