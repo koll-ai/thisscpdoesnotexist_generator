@@ -28,7 +28,7 @@ def remove_last_sentence(s):
 def generate_scp(scp_number, description, object_class):
     prompt = 'SCP-' + str(scp_number) + '-GPT is ' + description + '.\n\n' \
         + 'Item #:' + 'SCP-' + scp_number + '-GPT\n\n' \
-        + 'Object Class: ' + object_classes[object_class] + '\n\n' \
+        + 'Object Class: ' + object_class + '\n\n' \
         + 'Special Containment Procedures:'
 
     ret = req_complete(prompt, 100)
