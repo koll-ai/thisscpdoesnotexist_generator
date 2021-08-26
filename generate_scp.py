@@ -11,6 +11,10 @@ polls = r.json()['poll']
 
 # Get winner
 newlist = list(reversed(sorted(polls, key=lambda k: k['votes'])))
+
+if len(newlist) == 0:
+    exit(0)
+
 win = newlist[0]
 
 # set variables
