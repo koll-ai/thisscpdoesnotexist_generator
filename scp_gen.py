@@ -51,7 +51,7 @@ def generate_scp(scp_number, description, object_class):
     return prompt
 
 def toHTML(text):
-    text = re.sub(r"^(.*):",r"<h3>\1:</h5>",text)
+    text = re.sub(r"^(.*):",r"<h5>\1:</h5>",text)
     text = re.sub(r"\n\n(.*):",r"\n\n<h5>\1:</h5>",text)
     text = re.sub(r"SCP\-([0-9]*)\-GPT", r"<i>SCP-\1-GPT</i>", text)
     text = re.sub("\n", "<br>", text)
