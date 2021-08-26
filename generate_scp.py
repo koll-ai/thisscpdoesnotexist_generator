@@ -16,6 +16,7 @@ polls = r.json()['poll']
 newlist = list(reversed(sorted(polls, key=lambda k: k['votes'])))
 
 if len(newlist) == 0:
+    print("nothing to generate")
     next_time = str(int(time.time() + 3600))
     PARAMS = {'key': resetkey,
               'next_time': next_time}
