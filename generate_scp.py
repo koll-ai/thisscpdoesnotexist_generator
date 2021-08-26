@@ -36,7 +36,7 @@ print(scp_num)
 print(prompt)
 print("============================================================")
 
-scp = scp_gen.generate_scp(scp_num, prompt, win['scpClass'])
+scp = scp_gen.generate_scp(scp_num, prompt, int(win['scpClass']))
 scp = scp_gen.toHTML(scp)
 
 # save scp
