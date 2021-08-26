@@ -1,6 +1,5 @@
 import requests
 import scp_gen
-import openai
 import time
 import csv
 
@@ -16,11 +15,8 @@ win = newlist[0]
 # set variables
 object_classes = ['Safe', 'Euclid', 'Keter', 'Thaumiel']
 class_to_num = {c : i for i,c in enumerate(object_classes)}
-with open("./openai.key", "r") as f:
-    openai.api_key = f.readline()
 
-with open("./reset.key", "r") as f:
-    resetkey = f.readline()
+resetkey = open("reset.key", "r").read()
 
 # prepare inputs
 raw_prompt = win['prompt']
@@ -36,6 +32,7 @@ print(scp_num)
 print(prompt)
 print("============================================================")
 
+scp_gen.connect()
 scp = scp_gen.generate_scp(scp_num, prompt, win['scpClass'])
 scp = scp_gen.toHTML(scp)
 
