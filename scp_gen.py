@@ -22,7 +22,7 @@ def req_complete(prompt, max_tokens):
     stop=stops
     )["choices"][0]["text"]
 
-    return text
+    return remove_last_sentence(text)
 
 def remove_last_sentence(s):
     return s[::-1].split(".", 1)[1][::-1]+'.'
@@ -35,10 +35,10 @@ def generate_scp(scp_number, description, object_class):
     ret = req_complete(prompt, 300)
 
     prompt += ret + "\n\nDescription:"
-    ret = req_complete(prompt, 800)
+    ret = req_complete(prompt, 500)
 
     prompt += ret + "\n\nRecovery:"
-    ret = req_complete(prompt, 600)
+    ret = req_complete(prompt, 200)
 
     prompt += ret + "\n\nAddendum " + str(scp_number) +".1:"
     ret = req_complete(prompt, 600)
