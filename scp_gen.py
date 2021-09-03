@@ -51,18 +51,13 @@ def generate_scp(scp_number, description, object_class):
     return prompt
 
 def toHTML(text):
+    print(text)
+
     split = text.split('\n',1)
     text = "<center> <h3> <i>" + split[0] +"</i> </h3> </center>"+ split[1]
 
-    #nom du scp en italique
-    text = re.sub(r"SCP\-([0-9]*)\-GPT", r"<i>SCP-\1-GPT</i>", text)
-    text = re.sub(r"SCP\-([0-9]*)", r"<i>SCP-\1</i>", text)
-
     #entre guillemmets en italique
     text = re.sub(r'"([^"]*)"', r'<i>"\1"</i>', text)
-
-    #mot avant ":" en gras
-    text = re.sub(r'([0-9A-Za-z^:^ ]{4,}:)', r"<br><b>\1</b>", text)
 
     #termes insérés <=> toujous présents
     for s in ["Item #:", "Object Class:", "Special Containment Procedures:", "Description:", "Recovery:"]:
@@ -73,6 +68,12 @@ def toHTML(text):
     text = re.sub("\n", "<br>", text)
 
     text = re.sub(r"(<br>){3,}", "<br><br>", text)
+
+    #mot avant ":" en gras
+    text = re.sub(r'([0-9A-Za-z^:^ ^#]{4,}:)', r"<br><b>\1</b>", text)
+
+    #nom du scp en italique
+    text = re.sub(r"SCP\-([0-9]*)(\-GPT)?", r"<i>SCP-\1-GPT</i>", text)
 
     text = "<div class='justifier'>" + text + "</div>"
     text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
