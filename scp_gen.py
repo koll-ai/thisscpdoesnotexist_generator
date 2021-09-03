@@ -25,7 +25,10 @@ def req_complete(prompt, max_tokens):
     return remove_last_sentence(text)
 
 def remove_last_sentence(s):
-    return s[::-1].split(".", 1)[1][::-1]+'.'
+    if s[-1] != "." :
+        return s[::-1].split(".", 1)[1][::-1]+'.'
+    else:
+        return s
 
 def generate_scp(scp_number, description, object_class):
     prompt = 'SCP-' + str(scp_number) + '-GPT is ' + description + '.\n\n' \
