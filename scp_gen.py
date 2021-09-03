@@ -62,13 +62,13 @@ def toHTML(text):
     text = re.sub(r'"([^"]*)"', r'<i>"\1"</i>', text)
 
     #mot avant ":" en gras
-    text = re.sub(r'([0-9A-Za-z^:^ ]{1,30}:)', r"<b><br>\1</b>", text)
+    text = re.sub(r'([0-9A-Za-z^:^ ]*:)', r"<b><br>\1</b>", text)
 
     #termes insérés <=> toujous présents
     for s in ["Item #:", "Object Class:", "Special Containment Procedures:", "Description:", "Recovery:"]:
         text = re.sub(r"" + s,r"<h3>" + s +"</h3>",text)
         
-    text = re.sub(r'Addendum ?(\d*)\.([^\d]*)(\d):',r"<h3>Addendum \1.\3 </h3>",text)
+    text = re.sub(r'Addendum ?(\d*)\.([^\d]*)(\d):',r"<h3>Addendum \1.\3 :</h3>",text)
 
     text = re.sub("\n", "<br>", text)
 
