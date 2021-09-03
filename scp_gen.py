@@ -72,7 +72,7 @@ def toHTML(text):
 
     text = re.sub("\n", "<br>", text)
 
-    text = re.sub(r"(<br>){2,}", "<br>", text)
+    text = re.sub(r"(<br>){3,}", "<br><br>", text)
 
     text = "<div class='justifier'>" + text + "</div>"
     text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
