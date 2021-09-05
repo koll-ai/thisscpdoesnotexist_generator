@@ -3,25 +3,31 @@ import scp_gen
 import time
 import csv
 import openai
+import json
 
-resetkey = open("reset.key", "r").read().rstrip()
+with open("/home/thisscpdoesnotexist/tsde/polling_api.key", "r") as f:
+    NEXT_ROUND_KEY = f.read().rstrip()
+
+# resetkey = open("reset.key", "r").read().rstrip()
 
 
 # Get all polls
 url_poll = "https://thisscpdoesnotexist.pythonanywhere.com/get_poll/"
 r = requests.get(url_poll)
-polls = r.json()['poll']
-
-
-if len(polls) == 0:
+try:
+    polls = r.json()['poll']
+except :
     print("nothing to generate")
     next_time = str(int(time.time() + 3600))
-    PARAMS = {'key': resetkey,
+    PARAMS = {'key': NEXT_ROUND_KEY,
               'next_time': next_time}
 
     r = requests.get(url="http://thisscpdoesnotexist.pythonanywhere.com/next_round/", params=PARAMS)
 
     exit(0)
+
+
+
 
 # Get winner
 newlist = list(reversed(sorted(polls, key=lambda k: k['votes'])))
@@ -69,7 +75,7 @@ with open("../SCP-GPT_db/scp_list.csv", 'a') as f:
 f.close()
 
 next_time = str(int(time.time() + 3600))
-PARAMS = {'key': resetkey,
+PARAMS = {'key': NEXT_ROUND_KEY,
          'next_time' : next_time}
   
 r = requests.get(url = "http://thisscpdoesnotexist.pythonanywhere.com/next_round/", params = PARAMS)
