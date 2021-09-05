@@ -15,6 +15,7 @@ while True:
         cpt +=1
     else:
         os.system('/home/thisscpdoesnotexist/tsde_scp_gen/generator.sh')
+        cpt = 0
 
 
 
