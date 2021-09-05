@@ -73,7 +73,7 @@ with open("../SCP-GPT_db/scp_list.csv", 'a') as f:
 f.close()
 
 next_time = str(int(time.time() + 3600))
-PARAMS = {'key': resetkey,
+PARAMS = {'key': NEXT_ROUND_KEY,
          'next_time' : next_time}
   
 r = requests.get(url = "http://thisscpdoesnotexist.pythonanywhere.com/next_round/", params = PARAMS)
