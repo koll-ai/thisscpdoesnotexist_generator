@@ -20,7 +20,7 @@ polls = r.json()['poll']
 if len(polls) == 0:
     print("nothing to generate")
     next_time = str(int(time.time() + 3600))
-    PARAMS = {'key': resetkey,
+    PARAMS = {'key': NEXT_ROUND_KEY,
               'next_time': next_time}
 
     r = requests.get(url="http://thisscpdoesnotexist.pythonanywhere.com/next_round/", params=PARAMS)
