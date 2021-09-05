@@ -3,8 +3,11 @@ import scp_gen
 import time
 import csv
 import openai
+import json
 
-resetkey = open("reset.key", "r").read().rstrip()
+with open("reset.key", "r") as f:
+     resetkey= json.load(f)
+# resetkey = open("reset.key", "r").read().rstrip()
 
 
 # Get all polls
