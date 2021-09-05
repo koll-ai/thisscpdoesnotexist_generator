@@ -1,3 +1,5 @@
+# WARNING if change on cpt, need to change time.sleep value
+
 import time
 import os
 import requests
@@ -17,8 +19,5 @@ while True:
         os.system('/home/thisscpdoesnotexist/tsde_scp_gen/generator.sh')
         cpt = 0
 
-
-
-
-    time.sleep(3600)
+    time.sleep(600)
     
