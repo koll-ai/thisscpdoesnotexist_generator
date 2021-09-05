@@ -14,10 +14,11 @@ with open("/home/thisscpdoesnotexist/tsde/polling_api.key", "r") as f:
 # Get all polls
 url_poll = "https://thisscpdoesnotexist.pythonanywhere.com/get_poll/"
 r = requests.get(url_poll)
-polls = r.json()['poll']
+data = r.json()
 
+if 'poll' in data:
+    polls = data['poll']
 
-if len(polls) == 0:
     print("nothing to generate")
     next_time = str(int(time.time() + 3600))
     PARAMS = {'key': NEXT_ROUND_KEY,
