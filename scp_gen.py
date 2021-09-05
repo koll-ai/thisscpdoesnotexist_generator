@@ -28,8 +28,8 @@ def remove_last_sentence(s):
     return s[::-1].split(".", 1)[1][::-1]+'.'
 
 def generate_scp(scp_number, description, object_class):
-    prompt = 'SCP-' + str(scp_number) + '-GPT is ' + description + '.\n\n' \
-        + 'Item #: ' + 'SCP-' + scp_number + '-GPT\n\n' \
+    prompt = 'SCP-' + str(scp_number) + ' is ' + description + '.\n\n' \
+        + 'Item #: ' + 'SCP-' + scp_number + '\n\n' \
         + 'Object Class: ' + object_class + '\n\n' \
         + 'Special Containment Procedures: '
     ret = req_complete(prompt, 300)
@@ -73,7 +73,7 @@ def toHTML(text):
     text = re.sub(r'([0-9A-Za-z^:^ ^#^-^\.]{4,}:)', r"<br>\1", text)
 
     #nom du scp en italique
-    text = re.sub(r"SCP\-([0-9]*)(\-GPT)?", r"<i>SCP-\1-GPT</i>", text)
+    text = re.sub(r"SCP\-([0-9]*)", r"<i>SCP-\1</i>", text)
 
     text = "<div class='justifier'>" + text + "</div>"
     text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
