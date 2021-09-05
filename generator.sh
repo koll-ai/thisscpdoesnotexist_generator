@@ -11,5 +11,6 @@ git push
 
 cd $HOME/tsde/
 git add last.txt
+git commit -m "update last SCP"
 git pull
 git push
