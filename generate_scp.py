@@ -62,6 +62,10 @@ with open("../SCP-GPT_db/" + filename, 'w+') as f:
     f.write(scp)
 f.close()
 
+with open("../tsde/last.txt", 'w+') as f:
+    f.write(scp)
+f.close()
+
 with open("../SCP-GPT_db/scp_list.csv", 'a') as f:
     writer = csv.writer(f)
     writer.writerow([raw_prompt, win['scpClass'], filename])

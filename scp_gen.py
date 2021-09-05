@@ -35,15 +35,15 @@ def generate_scp(scp_number, description, object_class):
     ret = req_complete(prompt, 300)
 
     prompt += ret + "\n\nDescription:"
-    ret = req_complete(prompt, 800)
+    ret = req_complete(prompt, 500)
 
     prompt += ret + "\n\nRecovery:"
-    ret = req_complete(prompt, 600)
+    ret = req_complete(prompt, 200)
 
     prompt += ret + "\n\nAddendum " + str(scp_number) +".1:"
     ret = req_complete(prompt, 600)
 
-    prompt += ret + "\n\nAddendum" + str(scp_number) +".2:"
+    prompt += ret + "\n\nAddendum " + str(scp_number) +".2:"
     ret = req_complete(prompt, 300)
 
     prompt += ret
@@ -51,11 +51,31 @@ def generate_scp(scp_number, description, object_class):
     return prompt
 
 def toHTML(text):
-    text = re.sub(r"^(.*):",r"<h5>\1:</h5>",text)
-    text = re.sub(r"\n\n(.*):",r"\n\n<h5>\1:</h5>",text)
-    text = re.sub(r"SCP\-([0-9]*)\-GPT", r"<i>SCP-\1-GPT</i>", text)
+    print(text)
+
+    split = text.split('\n',1)
+    text = "<center> <h3> <i>" + split[0] +"</i> </h3> </center>"+ split[1]
+
+    #entre guillemmets en italique
+    text = re.sub(r'"([^"]*)"', r'<i>"\1"</i>', text)
+
+    #termes insérés <=> toujous présents
+    for s in ["Item #:", "Object Class:", "Special Containment Procedures:", "Description:", "Recovery:"]:
+        text = re.sub(r"" + s,r"<h3>" + s +"</h3>",text)
+        
+    text = re.sub(r'Addendum ?(\d*)\.([^\d]*)(\d):',r"<h3>Addendum \1.\3 :</h3>",text)
+
     text = re.sub("\n", "<br>", text)
+
+    text = re.sub(r"(<br>){3,}", "<br><br>", text)
+
+    #mot avant ":" en gras
+    text = re.sub(r'([0-9A-Za-z^:^ ^#^-^\.]{4,}:)', r"<br>\1", text)
+
+    #nom du scp en italique
+    text = re.sub(r"SCP\-([0-9]*)(\-GPT)?", r"<i>SCP-\1-GPT</i>", text)
 
     text = "<div class='justifier'>" + text + "</div>"
     text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
+    
     return text
