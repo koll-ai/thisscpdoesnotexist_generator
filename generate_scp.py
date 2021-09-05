@@ -5,8 +5,9 @@ import csv
 import openai
 import json
 
-with open("reset.key", "r") as f:
-     resetkey= json.load(f)
+with open("/home/thisscpdoesnotexist/tsde/polling_api.key", "r") as f:
+    NEXT_ROUND_KEY = f.read().rstrip()
+
 # resetkey = open("reset.key", "r").read().rstrip()
 
 
