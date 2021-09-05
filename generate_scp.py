@@ -14,11 +14,10 @@ with open("/home/thisscpdoesnotexist/tsde/polling_api.key", "r") as f:
 # Get all polls
 url_poll = "https://thisscpdoesnotexist.pythonanywhere.com/get_poll/"
 r = requests.get(url_poll)
-data = r.json()
-
-if 'poll' in data:
-    polls = data['poll']
-
+try:
+    polls = r.json()['poll']
+except e:
+    print(e)
     print("nothing to generate")
     next_time = str(int(time.time() + 3600))
     PARAMS = {'key': NEXT_ROUND_KEY,
@@ -27,6 +26,9 @@ if 'poll' in data:
     r = requests.get(url="http://thisscpdoesnotexist.pythonanywhere.com/next_round/", params=PARAMS)
 
     exit(0)
+
+
+
 
 # Get winner
 newlist = list(reversed(sorted(polls, key=lambda k: k['votes'])))
