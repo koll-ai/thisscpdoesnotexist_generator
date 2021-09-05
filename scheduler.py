@@ -4,7 +4,7 @@ import time
 import os
 import requests
 
-cpt = 6
+cpt = 5
 
 with open("/home/thisscpdoesnotexist/tsde/polling_api.key", "r") as f:
     NEXT_ROUND_KEY = f.read().rstrip()
