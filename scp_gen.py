@@ -70,7 +70,7 @@ def toHTML(text):
     text = re.sub(r"(<br>){3,}", "<br><br>", text)
 
     #mot avant ":" en gras
-    text = re.sub(r'([0-9A-Za-z: #\-█]{4,}:)', r"<br><b>\1</b>", text)
+    text = re.sub(r'([0-9A-Za-z: #\-█]{4,}:)', r"<br>\1", text)
 
     #nom du scp en italique
     text = re.sub(r"SCP\-([0-9]*)", r"<i>SCP-\1</i>", text)
