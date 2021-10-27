@@ -71,7 +71,7 @@ f.close()
 
 with open("../SCP-GPT_db/scp_list.csv", 'a') as f:
     writer = csv.writer(f)
-    writer.writerow([raw_prompt, win['scpClass'], filename])
+    writer.writerow([raw_prompt, win['scpClass'], filename, win['nsfw'], win['author']])
 f.close()
 
 next_time = str(int(time.time() + 3600))
