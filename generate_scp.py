@@ -5,14 +5,15 @@ import csv
 import openai
 import json
 
-with open("/home/thisscpdoesnotexist/tsde/polling_api.key", "r") as f:
+with open("./polling_api.key", "r") as f:
     NEXT_ROUND_KEY = f.read().rstrip()
 
 # resetkey = open("reset.key", "r").read().rstrip()
 
+url_api = "http://51.75.255.134:45900"
 
 # Get all polls
-url_poll = "https://thisscpdoesnotexist.pythonanywhere.com/get_poll/"
+url_poll = url_api + "/get_poll/"
 r = requests.get(url_poll)
 try:
     polls = r.json()['poll']
@@ -22,7 +23,7 @@ except :
     PARAMS = {'key': NEXT_ROUND_KEY,
               'next_time': next_time}
 
-    r = requests.get(url="http://thisscpdoesnotexist.pythonanywhere.com/next_round/", params=PARAMS)
+    r = requests.get(url=url_api + "/next_round/", params=PARAMS)
 
     exit(0)
 
@@ -45,7 +46,7 @@ class_to_num = {c : i for i,c in enumerate(object_classes)}
 raw_prompt = win['prompt']
 prompt = raw_prompt[raw_prompt.index('GPT') + 7:]
 
-url_poll = "https://thisscpdoesnotexist.pythonanywhere.com/current_scp_number/"
+url_poll = url_api + "/current_scp_number/"
 r = requests.get(url_poll)
 scp_num = r.text
 
@@ -61,15 +62,15 @@ scp = scp_gen.toHTML(scp)
 
 # save scp
 filename = 'SCP-' + scp_num + '-GPT.txt'
-with open("../SCP-GPT_db/" + filename, 'w+') as f:
+with open("../SCP_BDD/" + filename, 'w+') as f:
     f.write(scp)
 f.close()
 
-with open("../tsde/last.txt", 'w+') as f:
+with open("../SCP_API/last.txt", 'w+') as f:
     f.write(scp)
 f.close()
 
-with open("../SCP-GPT_db/scp_list.csv", 'a') as f:
+with open("../SCP_BDD/scp_list.csv", 'a') as f:
     writer = csv.writer(f)
     writer.writerow([raw_prompt, win['scpClass'], filename, win['nsfw'], win['author']])
 f.close()
@@ -78,7 +79,7 @@ next_time = str(int(time.time() + 3600))
 PARAMS = {'key': NEXT_ROUND_KEY,
          'next_time' : next_time}
   
-r = requests.get(url = "http://thisscpdoesnotexist.pythonanywhere.com/next_round/", params = PARAMS)
+r = requests.get(url = url_api + "/next_round/", params = PARAMS)
 
 if __name__ == '__main__':
     pass
