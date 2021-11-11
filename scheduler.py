@@ -6,7 +6,7 @@ import requests
 
 cpt = 5
 
-with open("/home/thisscpdoesnotexist/tsde/polling_api.key", "r") as f:
+with open("./polling_api.key", "r") as f:
     NEXT_ROUND_KEY = f.read().rstrip()
 
 
