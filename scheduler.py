@@ -13,7 +13,7 @@ with open("./polling_api.key", "r") as f:
 while True:
 
     print('saving data')
-    requests.get("http://http://51.75.255.134:45900/save_data/?key=" + NEXT_ROUND_KEY)
+    requests.get("http://51.75.255.134:45900/save_data/?key=" + NEXT_ROUND_KEY)
     cpt +=1
 
     if cpt == 6:
