@@ -44,9 +44,8 @@ class_to_num = {c : i for i,c in enumerate(object_classes)}
 
 # prepare inputs
 raw_prompt = win['prompt']
-print(raw_prompt)
 prompt = raw_prompt[12:]
-print(prompt)
+
 url_poll = url_api + "/current_scp_number/"
 r = requests.get(url_poll)
 scp_num = r.text
@@ -73,7 +72,7 @@ f.close()
 
 with open("../SCP_BDD/scp_list.csv", 'a') as f:
     writer = csv.writer(f)
-    writer.writerow([raw_prompt, win['scpClass'], filename, win['nsfw'], win['author']])
+    writer.writerow([scp_num, prompt, win['scpClass'], filename, win['nsfw'], win['author']])
 f.close()
 
 next_time = str(int(time.time() + 3600))
