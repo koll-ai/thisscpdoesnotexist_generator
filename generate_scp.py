@@ -44,6 +44,7 @@ class_to_num = {c : i for i,c in enumerate(object_classes)}
 
 # prepare inputs
 raw_prompt = win['prompt']
+print(raw_prompt)
 prompt = raw_prompt[raw_prompt.index('GPT') + 7:]
 
 url_poll = url_api + "/current_scp_number/"
