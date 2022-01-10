@@ -27,13 +27,8 @@ except :
 
     exit(0)
 
-
-
-
 # Get winner
 newlist = list(reversed(sorted(polls, key=lambda k: k['votes'])))
-
-
 
 win = newlist[0]
 
