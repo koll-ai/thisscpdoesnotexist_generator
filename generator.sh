@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+cd $HOME/SCP_gen/
 python3 generate_scp.py
 
 cd $HOME/SCP_BDD/
