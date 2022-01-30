@@ -56,7 +56,7 @@ def generate_scp(scp_number, description, object_class, **kwargs):
     if getSafetyLabel(procedures) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    prompt = prompt +\
+    ret = prompt +\
         "\n\nSpecial Containment Procedures:" + procedures +\
         '\n\nDescription:' + description
 
