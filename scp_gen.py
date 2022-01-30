@@ -6,9 +6,7 @@ import time
 ERROR_UNSAFE_CONTENT = "Error: unsafe content detected"
 
 object_classes = ['Safe', 'Euclid', 'Keter', 'Thaumiel']
-stops = ['\nItem #:', '\nDescription:', '\nAddendum', '\nRecovery:']
 username = "-1"
-
 
 def connect():
     key = open("openai.key", "r").read().rstrip()
@@ -16,7 +14,7 @@ def connect():
     print("connected to openAI")
 
 
-def req_complete(prompt, max_tokens, temp=0.3):
+def req_complete(prompt, max_tokens, temp=0.3, stops = ['\nItem #:', '\nDescription:', '\nAddendum', '\nRecovery:']):
     text = openai.Completion.create(
         engine="davinci",
         prompt=prompt,
@@ -36,7 +34,7 @@ def remove_last_sentence(s):
     return s[::-1].split(".", 1)[1][::-1] + '.'
 
 
-def generate_scp(scp_number, description, object_class, **kwargs):
+def generate_scp(scp_number, description, object_class):
     # get current hour from time module
     global username
     username = str(int(time.time() / 3600))
@@ -45,12 +43,12 @@ def generate_scp(scp_number, description, object_class, **kwargs):
              + 'Item #: ' + 'SCP-' + scp_number + '\n\n' \
              + 'Object Class: ' + object_class
              
-    description = req_complete(prompt + '\n\nDescription:', 500)
+    desc_field = req_complete(prompt + '\n\nDescription:', 500, stops=['\nSpecial Containment Procedures:', '\nDescription:', '\nAddendum', '\nRecovery:'])
 
-    if getSafetyLabel(description) == 2:
+    if getSafetyLabel(desc_field) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    proc_input = prompt + '\n\nDescription:' + description + "\n\nSpecial Containment Procedures:"
+    proc_input = prompt + '\n\nDescription:' + desc_field + "\n\nSpecial Containment Procedures:"
     procedures = req_complete(proc_input, 500)
 
     if getSafetyLabel(procedures) == 2:
@@ -58,7 +56,7 @@ def generate_scp(scp_number, description, object_class, **kwargs):
 
     ret = prompt +\
         "\n\nSpecial Containment Procedures:" + procedures +\
-        '\n\nDescription:' + description
+        '\n\nDescription:' + desc_field
 
     prompt += ret + "\n\nRecovery:"
     ret = req_complete(prompt, 200)
