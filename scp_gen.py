@@ -44,33 +44,27 @@ def generate_scp(scp_number, description, object_class):
              + 'Object Class: ' + object_class
              
     desc_field = req_complete(prompt + '\n\nDescription:', 500, stops=['\nSpecial Containment Procedures:', '\nDescription:', '\nAddendum', '\nRecovery:'])
-
     if getSafetyLabel(desc_field) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    proc_input = prompt + '\n\nDescription:' + desc_field + "\n\nSpecial Containment Procedures:"
-    procedures = req_complete(proc_input, 500)
-
-    if getSafetyLabel(procedures) == 2:
+    proc_field = req_complete(prompt + '\n\nDescription:' + desc_field + "\n\nSpecial Containment Procedures:", 500)
+    if getSafetyLabel(proc_field) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    ret = prompt +\
-        "\n\nSpecial Containment Procedures:" + procedures +\
-        '\n\nDescription:' + desc_field
+    prompt += prompt + "\n\nSpecial Containment Procedures:" + proc_field
+    prompt += prompt + "\n\nDescription:" + desc_field
 
-    ret += ret + "\n\nRecovery:"
+    prompt += prompt + "\n\nRecovery:"
     ret = req_complete(prompt, 200)
-
     if getSafetyLabel(ret) == 2:
         return ERROR_UNSAFE_CONTENT
+    prompt += ret
 
-    add_input = ret + "\n\nAddendum " + str(scp_number) + ".1:"
-    addendum1 = req_complete(add_input, 900)
+    addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".1:", 900)
     if getSafetyLabel(addendum1) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    add2_input = ret + "\n\nAddendum " + str(scp_number) + ".2:"
-    addendum2 = req_complete(add2_input, 900)
+    addendum2 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".2:", 900)
     if getSafetyLabel(addendum2) == 2:
         return ERROR_UNSAFE_CONTENT
 
