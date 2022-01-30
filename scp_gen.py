@@ -39,7 +39,7 @@ def generate_scp(scp_number, description, object_class):
     global username
     username = str(int(time.time() / 3600))
 
-    prompt = 'SCP-' + str(scp_number) + ' is ' + description + '.\n\n' \
+    prompt = 'SCP-' + str(scp_number) + ' is ' + description + '\n\n' \
              + 'Item #: ' + 'SCP-' + scp_number + '\n\n' \
              + 'Object Class: ' + object_class
              
@@ -69,7 +69,7 @@ def generate_scp(scp_number, description, object_class):
     if getSafetyLabel(addendum1) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    add2_input += ret + "\n\nAddendum " + str(scp_number) + ".2:"
+    add2_input = ret + "\n\nAddendum " + str(scp_number) + ".2:"
     addendum2 = req_complete(add2_input, 900)
     if getSafetyLabel(addendum2) == 2:
         return ERROR_UNSAFE_CONTENT
