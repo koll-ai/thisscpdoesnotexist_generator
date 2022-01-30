@@ -154,8 +154,8 @@ def toHTML(text):
     text = re.sub(r"~~([^~]*)~~", r"<s>\1</s>", text)
 
     #block quote
-    text = re.sub(r'<Begin Log>', r"<Begin Log><blockquote class='blockquote'>", text)
-    text = re.sub(r'<End Log>', r"</blockquote><End Log>", text)
+    # text = re.sub(r'<Begin Log>', r"<Begin Log><blockquote class='blockquote'>", text)
+    # text = re.sub(r'<End Log>', r"</blockquote><End Log>", text)
 
     # escape html brackets
     text = re.sub(r"<Begin Log>", r"<br><br>&lt;Begin Log&gt<br><br>", text)
