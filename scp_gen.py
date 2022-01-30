@@ -131,8 +131,6 @@ def getSafetyLabel(text):
 
 
 def toHTML(text):
-    print(text)
-
     split = text.split('\n', 1)
     text = "<center> <h3> <i>" + split[0] + "</i> </h3> </center>" + split[1]
 
@@ -146,19 +144,27 @@ def toHTML(text):
 
     text = re.sub("\n", "<br>", text)
 
-    text = re.sub(r"(<br>){3,}", "<br><br>", text)
-
     # first line of the interview format
-    text = re.sub(r'Interviewed:(.*)Interviewer:(.*)Foreword:', r"<b>Interviewed: \1</b> <br> <b>Interviewer: \2</b> <br> <b>Foreword:</b>", text)
+    text = re.sub(r'Interviewed:(.*?)Interviewer:(.*?)(<Begin Log>|Foreword:)', r"<b>Interviewed: \1</b> <b>Interviewer: \2</b> <br> \3", text)
 
-    # mot avant ":" saut de ligne et en gras
-    text = re.sub(r'([0-9A-Za-z: .#\-█]{4,}:)', r"<br><b>\1</b>", text)
+    # mot avant ":" saut de ligne et en gras pendant les interviews
+    text = re.sub(r'([0-9A-Za-z#\-█. ]{4,}:)', r"<br><br><b>\1</b>", text)
+
+    #strikethrough text when inside ~~
+    text = re.sub(r"~~([^~]*)~~", r"<s>\1</s>", text)
+
+    #block quote
+    text = re.sub(r'<Begin Log>', r"<Begin Log><blockquote class='blockquote'>", text)
+    text = re.sub(r'<End Log>', r"</blockquote><End Log>", text)
+
+    # escape html brackets
+    text = re.sub(r"<Begin Log>", r"<br><br>&lt;Begin Log&gt<br><br>", text)
+    text = re.sub(r"<End Log>", r"<br><br>&lt;End Log&gt<br><br>", text)
 
     # nom du scp en italique
     text = re.sub(r"SCP\-([0-9]+)", r"<i>SCP-\1</i>", text)
 
-    #strikethrough text when inside ~~
-    text = re.sub(r"~~([^~]*)~~", r"<s>\1</s>", text)
+    text = re.sub(r"(<br>){3,}", "<br><br>", text)
 
     text = "<div class='justifier'>" + text + "</div>"
     text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
