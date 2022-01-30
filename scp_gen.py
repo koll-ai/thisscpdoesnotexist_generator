@@ -16,11 +16,11 @@ def connect():
     print("connected to openAI")
 
 
-def req_complete(prompt, max_tokens, temerature=0.7):
+def req_complete(prompt, max_tokens, temp=0.3):
     text = openai.Completion.create(
         engine="davinci",
         prompt=prompt,
-        temperature=0.7,
+        temperature=temp,
         max_tokens=max_tokens,
         top_p=1.0,
         frequency_penalty=1.0,
@@ -43,18 +43,22 @@ def generate_scp(scp_number, description, object_class, **kwargs):
 
     prompt = 'SCP-' + str(scp_number) + ' is ' + description + '.\n\n' \
              + 'Item #: ' + 'SCP-' + scp_number + '\n\n' \
-             + 'Object Class: ' + object_class + '\n\n' \
-             + 'Special Containment Procedures: '
-    ret = req_complete(prompt, 300)
+             + 'Object Class: ' + object_class
+             
+    description = req_complete(prompt + '\n\nDescription:', 500)
 
-    if getSafetyLabel(ret) == 2:
+    if getSafetyLabel(description) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    prompt += ret + "\n\nDescription:"
-    ret = req_complete(prompt, 500)
+    proc_input = prompt + '\n\nDescription:' + description + "\n\nSpecial Containment Procedures:"
+    procedures = req_complete(proc_input, 500)
 
-    if getSafetyLabel(ret) == 2:
+    if getSafetyLabel(procedures) == 2:
         return ERROR_UNSAFE_CONTENT
+
+    prompt = prompt +\
+        "\n\nSpecial Containment Procedures:" + procedures +\
+        '\n\nDescription:' + description
 
     prompt += ret + "\n\nRecovery:"
     ret = req_complete(prompt, 200)
@@ -63,13 +67,7 @@ def generate_scp(scp_number, description, object_class, **kwargs):
         return ERROR_UNSAFE_CONTENT
 
     prompt += ret + "\n\nAddendum " + str(scp_number) + ".1:"
-    ret = req_complete(prompt, 600)
-
-    if getSafetyLabel(ret) == 2:
-        return ERROR_UNSAFE_CONTENT
-
-    prompt += ret + "\n\nAddendum " + str(scp_number) + ".2:"
-    ret = req_complete(prompt, 300)
+    ret = req_complete(prompt, 900)
 
     if getSafetyLabel(ret) == 2:
         return ERROR_UNSAFE_CONTENT
@@ -136,8 +134,6 @@ def getSafetyLabel(text):
 
 
 def toHTML(text):
-    print(text)
-
     split = text.split('\n', 1)
     text = "<center> <h3> <i>" + split[0] + "</i> </h3> </center>" + split[1]
 
@@ -158,7 +154,10 @@ def toHTML(text):
     text = re.sub(r'([0-9A-Za-z: #\-█]{4,}:)', r"<br>\1", text)
 
     # nom du scp en italique
-    text = re.sub(r"SCP\-([0-9]*)", r"<i>SCP-\1</i>", text)
+    text = re.sub(r"SCP\-([0-9]+)", r"<i>SCP-\1</i>", text)
+
+    #strikethrough text when inside ~~
+    text = re.sub(r"~~([^~]*)~~", r"<s>\1</s>", text)
 
     text = "<div class='justifier'>" + text + "</div>"
     text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
