@@ -64,13 +64,18 @@ def generate_scp(scp_number, description, object_class):
     if getSafetyLabel(ret) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    prompt += ret + "\n\nAddendum " + str(scp_number) + ".1:"
-    ret = req_complete(prompt, 900)
-
-    if getSafetyLabel(ret) == 2:
+    add_input = ret + "\n\nAddendum " + str(scp_number) + ".1:"
+    addendum1 = req_complete(add_input, 900)
+    if getSafetyLabel(addendum1) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    prompt += ret
+    add2_input += ret + "\n\nAddendum " + str(scp_number) + ".2:"
+    addendum2 = req_complete(add2_input, 900)
+    if getSafetyLabel(addendum2) == 2:
+        return ERROR_UNSAFE_CONTENT
+
+    prompt += + "\n\nAddendum " + str(scp_number) + ".1:" + addendum1
+    prompt += + "\n\nAddendum " + str(scp_number) + ".2:" + addendum2
 
     return prompt
 
@@ -132,6 +137,8 @@ def getSafetyLabel(text):
 
 
 def toHTML(text):
+    print(text)
+
     split = text.split('\n', 1)
     text = "<center> <h3> <i>" + split[0] + "</i> </h3> </center>" + split[1]
 
@@ -141,15 +148,17 @@ def toHTML(text):
     # termes insérés <=> toujous présents
     for s in ["Item #:", "Object Class:", "Special Containment Procedures:", "Description:", "Recovery:"]:
         text = re.sub(r"" + s, r"<h3>" + s + "</h3>", text)
-
     text = re.sub(r'Addendum ?(\d*)\.([^\d]*)(\d):', r"<h3>Addendum \1.\3 :</h3>", text)
 
     text = re.sub("\n", "<br>", text)
 
     text = re.sub(r"(<br>){3,}", "<br><br>", text)
 
-    # mot avant ":" en gras
-    text = re.sub(r'([0-9A-Za-z: #\-█]{4,}:)', r"<br>\1", text)
+    # first line of the interview format
+    text = re.sub(r'Interviewed:(.*)Interviewer:(.*)Foreword:', r"<b>Interviewed: \1</b> <br> <b>Interviewer: \2</b> <br> <b>Foreword:</b>", text)
+
+    # mot avant ":" saut de ligne et en gras
+    text = re.sub(r'([0-9A-Za-z: .#\-█]{4,}:)', r"<br><b>\1</b>", text)
 
     # nom du scp en italique
     text = re.sub(r"SCP\-([0-9]+)", r"<i>SCP-\1</i>", text)
