@@ -56,6 +56,10 @@ scp = scp_gen.generate_scp(scp_num, prompt, win['scpClass'])
 print('RAW SCP :')
 print(scp)
 print('END raw SCP')
+
+with open("last_raw.txt", "w") as f:
+    f.write(scp)
+
 scp = scp_gen.toHTML(scp)
 
 # save scp
