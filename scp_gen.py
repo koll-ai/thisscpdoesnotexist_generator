@@ -51,10 +51,10 @@ def generate_scp(scp_number, description, object_class):
     if getSafetyLabel(proc_field) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    prompt += prompt + "\n\nSpecial Containment Procedures:" + proc_field
-    prompt += prompt + "\n\nDescription:" + desc_field
+    prompt += "\n\nSpecial Containment Procedures:" + proc_field
+    prompt += "\n\nDescription:" + desc_field
 
-    prompt += prompt + "\n\nRecovery:"
+    prompt += "\n\nRecovery:"
     ret = req_complete(prompt, 200)
     if getSafetyLabel(ret) == 2:
         return ERROR_UNSAFE_CONTENT
