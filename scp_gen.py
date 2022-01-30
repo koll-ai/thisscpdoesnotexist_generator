@@ -58,7 +58,7 @@ def generate_scp(scp_number, description, object_class):
         "\n\nSpecial Containment Procedures:" + procedures +\
         '\n\nDescription:' + desc_field
 
-    prompt += ret + "\n\nRecovery:"
+    ret += ret + "\n\nRecovery:"
     ret = req_complete(prompt, 200)
 
     if getSafetyLabel(ret) == 2:
