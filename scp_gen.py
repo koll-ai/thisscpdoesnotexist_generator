@@ -39,38 +39,37 @@ def generate_scp(scp_number, description, object_class):
     global username
     username = str(int(time.time() / 3600))
 
-    prompt = 'SCP-' + str(scp_number) + ' is ' + description + '.\n\n' \
+    prompt = 'SCP-' + str(scp_number) + ' is ' + description + '\n\n' \
              + 'Item #: ' + 'SCP-' + scp_number + '\n\n' \
              + 'Object Class: ' + object_class
              
     desc_field = req_complete(prompt + '\n\nDescription:', 500, stops=['\nSpecial Containment Procedures:', '\nDescription:', '\nAddendum', '\nRecovery:'])
-
     if getSafetyLabel(desc_field) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    proc_input = prompt + '\n\nDescription:' + desc_field + "\n\nSpecial Containment Procedures:"
-    procedures = req_complete(proc_input, 500)
-
-    if getSafetyLabel(procedures) == 2:
+    proc_field = req_complete(prompt + '\n\nDescription:' + desc_field + "\n\nSpecial Containment Procedures:", 500)
+    if getSafetyLabel(proc_field) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    ret = prompt +\
-        "\n\nSpecial Containment Procedures:" + procedures +\
-        '\n\nDescription:' + desc_field
+    prompt += "\n\nSpecial Containment Procedures:" + proc_field
+    prompt += "\n\nDescription:" + desc_field
 
-    ret += ret + "\n\nRecovery:"
+    prompt += "\n\nRecovery:"
     ret = req_complete(prompt, 200)
-
     if getSafetyLabel(ret) == 2:
         return ERROR_UNSAFE_CONTENT
-
-    prompt += ret + "\n\nAddendum " + str(scp_number) + ".1:"
-    ret = req_complete(prompt, 900)
-
-    if getSafetyLabel(ret) == 2:
-        return ERROR_UNSAFE_CONTENT
-
     prompt += ret
+
+    addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".1:", 900)
+    if getSafetyLabel(addendum1) == 2:
+        return ERROR_UNSAFE_CONTENT
+
+    addendum2 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".2:", 900)
+    if getSafetyLabel(addendum2) == 2:
+        return ERROR_UNSAFE_CONTENT
+
+    prompt += "\n\nAddendum " + str(scp_number) + ".1:" + addendum1
+    prompt += "\n\nAddendum " + str(scp_number) + ".2:" + addendum2
 
     return prompt
 
@@ -141,21 +140,31 @@ def toHTML(text):
     # termes insérés <=> toujous présents
     for s in ["Item #:", "Object Class:", "Special Containment Procedures:", "Description:", "Recovery:"]:
         text = re.sub(r"" + s, r"<h3>" + s + "</h3>", text)
-
     text = re.sub(r'Addendum ?(\d*)\.([^\d]*)(\d):', r"<h3>Addendum \1.\3 :</h3>", text)
 
     text = re.sub("\n", "<br>", text)
 
-    text = re.sub(r"(<br>){3,}", "<br><br>", text)
+    # first line of the interview format
+    text = re.sub(r'Interviewed:(.*?)Interviewer:(.*?)(<Begin Log>|Foreword:)', r"<b>Interviewed: \1</b> <b>Interviewer: \2</b> <br> \3", text)
 
-    # mot avant ":" en gras
-    text = re.sub(r'([0-9A-Za-z: #\-█]{4,}:)', r"<br>\1", text)
+    # mot avant ":" saut de ligne et en gras pendant les interviews
+    text = re.sub(r'([0-9A-Za-z#\-█. ]{4,}:)', r"<br><br><b>\1</b>", text)
+
+    #strikethrough text when inside ~~
+    text = re.sub(r"~~([^~]*)~~", r"<s>\1</s>", text)
+
+    #block quote
+    text = re.sub(r'<Begin Log>', r"<Begin Log><blockquote class='blockquote'>", text)
+    text = re.sub(r'<End Log>', r"</blockquote><End Log>", text)
+
+    # escape html brackets
+    text = re.sub(r"<Begin Log>", r"<br><br>&lt;Begin Log&gt<br><br>", text)
+    text = re.sub(r"<End Log>", r"<br><br>&lt;End Log&gt<br><br>", text)
 
     # nom du scp en italique
     text = re.sub(r"SCP\-([0-9]+)", r"<i>SCP-\1</i>", text)
 
-    #strikethrough text when inside ~~
-    text = re.sub(r"~~([^~]*)~~", r"<s>\1</s>", text)
+    text = re.sub(r"(<br>){3,}", "<br><br>", text)
 
     text = "<div class='justifier'>" + text + "</div>"
     text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
