@@ -53,6 +53,9 @@ print("============================================================")
 
 scp_gen.connect()
 scp = scp_gen.generate_scp(scp_num, prompt, win['scpClass'])
+print('RAW SCP :')
+print(scp)
+print('END raw SCP')
 scp = scp_gen.toHTML(scp)
 
 # save scp
