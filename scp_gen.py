@@ -15,17 +15,21 @@ def connect():
 
 
 def req_complete(prompt, max_tokens, temp=0.45, stops = ['\nItem #:', '\nAddendum']):
-    text = openai.Completion.create(
-        engine="davinci",
-        prompt=prompt,
-        temperature=temp,
-        max_tokens=max_tokens,
-        top_p=1.0,
-        frequency_penalty=1.0,
-        presence_penalty=0.0,
-        stop=stops,
-        user=username
-    )["choices"][0]["text"]
+    try:
+        text = openai.Completion.create(
+            engine="davinci",
+            prompt=prompt,
+            temperature=temp,
+            max_tokens=max_tokens,
+            top_p=1.0,
+            frequency_penalty=1.0,
+            presence_penalty=0.0,
+            stop=stops,
+            user=username
+        )["choices"][0]["text"]
+    except openai.error.InvalidRequestError as e:
+        print(e)
+        text = "."
 
     return text
 
