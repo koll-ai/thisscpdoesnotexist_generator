@@ -73,6 +73,8 @@ def generate_scp(scp_number, description, object_class):
             return ERROR_UNSAFE_CONTENT
         if len(addendum0) > 0:
             prompt += "\n\nAddendum " + str(scp_number) + ".1: " + addendum0
+    else:
+        prompt += "\n\nAddendum " + str(scp_number) + ".1: " + addendum0
 
     addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".2: Interview with ", 900)
     if getSafetyLabel(addendum1) == 2:
@@ -89,6 +91,8 @@ def generate_scp(scp_number, description, object_class):
             return ERROR_UNSAFE_CONTENT
         if len(addendum1) > 0:
             prompt += "\n\nAddendum " + str(scp_number) + ".2: Interview with " + addendum1
+    else:
+        prompt += "\n\nAddendum " + str(scp_number) + ".2: Interview with " + addendum1
 
     #Addendum 3
     if len(addendum2) == 0:
@@ -97,6 +101,8 @@ def generate_scp(scp_number, description, object_class):
             return ERROR_UNSAFE_CONTENT
         if len(addendum2) > 0:
             prompt += "\n\nAddendum " + str(scp_number) + ".3: Experiment Log :" + addendum2
+    else:
+        prompt += "\n\nAddendum " + str(scp_number) + ".3: Interview with " + addendum2
 
     return prompt
 
