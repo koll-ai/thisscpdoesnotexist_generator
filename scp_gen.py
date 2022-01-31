@@ -68,7 +68,7 @@ def generate_scp(scp_number, description, object_class):
     if getSafetyLabel(addendum2) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    prompt += "\n\nAddendum " + str(scp_number) + ".1: \n Interview " + addendum1
+    prompt += "\n\nAddendum " + str(scp_number) + ".1: \n Interview with " + addendum1
     prompt += "\n\nAddendum " + str(scp_number) + ".2: \n Test Log " + addendum2
 
     return prompt
