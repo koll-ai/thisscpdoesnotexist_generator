@@ -153,7 +153,7 @@ def toHTML(text):
     # mot avant ":" saut de ligne et en gras pendant les interviews
     text = re.sub(r'([0-9A-Za-z#\-█.\]\[]{4,}: )', r"\n\n<b>\1</b>", text)
     text = re.sub(r'(Dr.|Mr.|Mme.|Ms.) \n\n<b>([^<]+)</b>', r"\n\n<b>\2 \1</b>", text)
-    text = re.sub(r'Closing \n\n<b>Statement:</b>', r"\n\n<b>\2 \1</b>", text)
+    text = re.sub(r'Closing \n\n<b>Statement:</b>', r"\n\n<b>Closing Statement</b>", text)
 
     #strikethrough text when inside ~~
     text = re.sub(r"~~([^~]*)~~", r"<s>\1</s>", text)
