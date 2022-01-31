@@ -142,13 +142,11 @@ def toHTML(text):
         text = re.sub(r"" + s, r"<h3>" + s + "</h3>", text)
     text = re.sub(r'Addendum ?(\d*)\.([^\d]*)(\d):', r"<h3>Addendum \1.\3 :</h3>", text)
 
-    text = re.sub("\n", "<br>", text)
-
     # first line of the interview format
-    text = re.sub(r'Interviewed:(.*?)Interviewer:(.*?)(<Begin Log>|Foreword:)', r"<b>Interviewed: \1</b> <b>Interviewer: \2</b> <br> \3", text)
+    text = re.sub(r'Interviewed:([^\n]*?)Interviewer:([^\n]*?)(<Begin Log>|Foreword:)', r"<b>Interviewed: \1</b> <b>Interviewer: \2</b> <br> \3", text)
 
     # mot avant ":" saut de ligne et en gras pendant les interviews
-    text = re.sub(r'([0-9A-Za-z#\-█.\]\[]{4,}:)', r"<br><br><b>\1</b>", text)
+    text = re.sub(r'([0-9A-Za-z#\-█.\]\[ ]{4,}:)', r"\n\n<b>\1</b>", text)
 
     #strikethrough text when inside ~~
     text = re.sub(r"~~([^~]*)~~", r"<s>\1</s>", text)
@@ -158,13 +156,15 @@ def toHTML(text):
     # text = re.sub(r'<End Log>', r"</blockquote><End Log>", text)
 
     # escape html brackets
-    text = re.sub(r"<Begin Log>", r"<br><br>&lt;Begin Log&gt<br><br>", text)
-    text = re.sub(r"<End Log>", r"<br><br>&lt;End Log&gt<br><br>", text)
+    text = re.sub(r"<Begin Log>", r"\n\n&lt;Begin Log&gt\n\n", text)
+    text = re.sub(r"<End Log>", r"\n\n&lt;End Log&gt\n\n", text)
 
     # nom du scp en italique
     text = re.sub(r"SCP\-([0-9]+)", r"<i>SCP-\1</i>", text)
 
-    text = re.sub(r"(<br>){3,}", "<br><br>", text)
+    text = re.sub(r"\n+<([^>]*)>\n+", r"\n\n<\1>", text)
+    text = re.sub(r"\n", r"<br>", text)
+    text = re.sub(r"( *<br> *){3,}", r"<br><br>", text)
 
     text = "<div class='justifier'>" + text + "</div>"
     text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
