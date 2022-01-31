@@ -29,7 +29,7 @@ def req_complete(prompt, max_tokens, temp=0.45, stops = ['\nItem #:', '\nAddendu
         )["choices"][0]["text"]
     except openai.error.InvalidRequestError as e:
         print(e)
-        text = "."
+        text = ""
 
     return text
 
