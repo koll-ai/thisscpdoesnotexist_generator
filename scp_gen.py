@@ -14,7 +14,7 @@ def connect():
     print("connected to openAI")
 
 
-def req_complete(prompt, max_tokens, temp=0.45, stops = ['\nItem #:', '\nDescription:', '\nAddendum', '\nRecovery:']):
+def req_complete(prompt, max_tokens, temp=0.45, stops = [r'\nItem #:', r'\nDescription:', r'\nAddendum', r'\nRecovery:']):
     text = openai.Completion.create(
         engine="davinci",
         prompt=prompt,
