@@ -14,7 +14,7 @@ def connect():
     print("connected to openAI")
 
 
-def req_complete(prompt, max_tokens, temp=0.45, stops = [r'\nItem #:', r'\nDescription:', r'\nAddendum', r'\nRecovery:']):
+def req_complete(prompt, max_tokens, temp=0.45, stops = ['\nItem #:', '\nDescription:', '\nAddendum', '\nRecovery:']):
     text = openai.Completion.create(
         engine="davinci",
         prompt=prompt,
@@ -47,7 +47,7 @@ def generate_scp(scp_number, description, object_class):
     if getSafetyLabel(desc_field) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    proc_field = req_complete(prompt + '\n\nDescription:' + desc_field + "\n\nSpecial Containment Procedures:", 300, temp=0.3)
+    proc_field = req_complete(prompt + '\n\nDescription:' + desc_field + "\n\nSpecial Containment Procedures:", 300, temp=0.3, stops=['Click here', '\nDescription:', '\nAddendum', '\nRecovery:'])
     if getSafetyLabel(proc_field) == 2:
         return ERROR_UNSAFE_CONTENT
 
