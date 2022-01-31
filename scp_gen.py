@@ -102,7 +102,7 @@ def generate_scp(scp_number, description, object_class):
         if len(addendum2) > 0:
             prompt += "\n\nAddendum " + str(scp_number) + ".3: Experiment Log :" + addendum2
     else:
-        prompt += "\n\nAddendum " + str(scp_number) + ".3: Interview with " + addendum2
+        prompt += "\n\nAddendum " + str(scp_number) + ".3: Experiment Log " + addendum2
 
     return prompt
 
@@ -170,7 +170,10 @@ def toHTML(text):
     # entre guillemmets en italique
     text = re.sub(r'"([^"]*)"', r'<i>"\1"</i>', text)
 
+    text = re.sub(r'\s:', r':', text)
+
     # termes insérés <=> toujous présents
+    #? maybe add exception for Experiment #:
     for s in ["Item #:", "Object Class:", "Special Containment Procedures:", "Description:", "Recovery:"]:
         text = re.sub(r"" + s, r"<h3>" + s + "</h3>", text)
     text = re.sub(r'Addendum ?(\d*)\.([^\d]*)(\d): ', r"<h3>Addendum \1.\3 : </h3>", text)
