@@ -44,7 +44,7 @@ def generate_scp(scp_number, description, object_class):
              + 'Object Class: ' + object_class
     
     input = prompt + '\n\n' + 'Description:'
-    desc_field = req_complete(input, 700, stops=['\nSpecial Containment Procedures:', '\nAddendum', '\nRecovery:', '\nItem #:'])
+    desc_field = req_complete(input, 700, stops=['\nSpecial Containment Procedures:', '\nAddendum', '\nDescription:', '\nItem #:'])
     if getSafetyLabel(desc_field) == 2:
         return ERROR_UNSAFE_CONTENT
 
