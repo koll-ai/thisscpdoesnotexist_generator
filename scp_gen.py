@@ -60,7 +60,7 @@ def generate_scp(scp_number, description, object_class):
         return ERROR_UNSAFE_CONTENT
     prompt += ret
 
-    addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".1: Interview ", 900)
+    addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".1: Interview with", 900)
     if getSafetyLabel(addendum1) == 2:
         return ERROR_UNSAFE_CONTENT
 
@@ -146,7 +146,8 @@ def toHTML(text):
     text = re.sub(r'Interviewed:([^\n]*?)Interviewer:([^\n]*?)(<Begin Log>|Foreword:)', r"<b>Interviewed: \1</b> <b>Interviewer: \2</b> <br> \3", text)
 
     # mot avant ":" saut de ligne et en gras pendant les interviews
-    text = re.sub(r'([0-9A-Za-z#\-█.\]\[ ]{4,}: )', r"\n\n<b>\1</b>", text)
+    text = re.sub(r'([0-9A-Za-z#\-█.\]\[]{4,}: )', r"\n\n<b>\1</b>", text)
+    text = re.sub(r'Dr. \n\n<b>([^<]+)</b>', r"\n\n<b>Dr. \1</b>", text)
 
     #strikethrough text when inside ~~
     text = re.sub(r"~~([^~]*)~~", r"<s>\1</s>", text)
