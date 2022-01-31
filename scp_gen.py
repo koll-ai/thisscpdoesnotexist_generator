@@ -43,17 +43,18 @@ def generate_scp(scp_number, description, object_class):
              + 'Item #: ' + 'SCP-' + scp_number + '\n\n' \
              + 'Object Class: ' + object_class
     
-    prompt += '\n\n' + 'Description:'
-    desc_field = req_complete(prompt, 700, stops=['\nSpecial Containment Procedures:', '\nAddendum', '\nRecovery:', '\nItem #:'])
+    input = prompt + '\n\n' + 'Description:'
+    desc_field = req_complete(input, 700, stops=['\nSpecial Containment Procedures:', '\nAddendum', '\nRecovery:', '\nItem #:'])
     if getSafetyLabel(desc_field) == 2:
         return ERROR_UNSAFE_CONTENT
-    prompt += desc_field
 
-    prompt += '\n\n' + 'Special Containment Procedures:'
-    proc_field = req_complete(prompt, 300, temp=0.3, stops=['Click here', '\nItem #:', '\nAddendum', '\nRecovery:'])
+    input = prompt + '\n\n' + 'Description:' + desc_field + '\n\n' + 'Special Containment Procedures:'
+    proc_field = req_complete(input, 300, temp=0.3, stops=['Click here', '\nItem #:', '\nAddendum', '\nRecovery:'])
     if getSafetyLabel(proc_field) == 2:
         return ERROR_UNSAFE_CONTENT
-    prompt += proc_field
+
+    prompt += '\n\n' + 'Special Containment Procedures:' + proc_field
+    prompt += '\n\n' + 'Description:' + desc_field
 
     # prompt += "\n\nRecovery:"
     # ret = req_complete(prompt, 200, temp=0.5)
