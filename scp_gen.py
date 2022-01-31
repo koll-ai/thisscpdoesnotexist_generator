@@ -14,7 +14,7 @@ def connect():
     print("connected to openAI")
 
 
-def req_complete(prompt, max_tokens, temp=0.3, stops = ['\nItem #:', '\nDescription:', '\nAddendum', '\nRecovery:']):
+def req_complete(prompt, max_tokens, temp=0.45, stops = ['\nItem #:', '\nDescription:', '\nAddendum', '\nRecovery:']):
     text = openai.Completion.create(
         engine="davinci",
         prompt=prompt,
@@ -55,21 +55,21 @@ def generate_scp(scp_number, description, object_class):
     prompt += "\n\nDescription:" + desc_field
 
     prompt += "\n\nRecovery:"
-    ret = req_complete(prompt, 200)
+    ret = req_complete(prompt, 200, temp=0.6)
     if getSafetyLabel(ret) == 2:
         return ERROR_UNSAFE_CONTENT
     prompt += ret
 
-    addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".1:", 900)
+    addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".1: \n Interview ", 900)
     if getSafetyLabel(addendum1) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    addendum2 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".2:", 900)
+    addendum2 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".2: \n Test Log ", 900)
     if getSafetyLabel(addendum2) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    prompt += "\n\nAddendum " + str(scp_number) + ".1:" + addendum1
-    prompt += "\n\nAddendum " + str(scp_number) + ".2:" + addendum2
+    prompt += "\n\nAddendum " + str(scp_number) + ".1: \n Interview " + addendum1
+    prompt += "\n\nAddendum " + str(scp_number) + ".2: \n Test Log " + addendum2
 
     return prompt
 
@@ -148,7 +148,7 @@ def toHTML(text):
     text = re.sub(r'Interviewed:(.*?)Interviewer:(.*?)(<Begin Log>|Foreword:)', r"<b>Interviewed: \1</b> <b>Interviewer: \2</b> <br> \3", text)
 
     # mot avant ":" saut de ligne et en gras pendant les interviews
-    text = re.sub(r'([0-9A-Za-z#\-█. ]{4,}:)', r"<br><br><b>\1</b>", text)
+    text = re.sub(r'([0-9A-Za-z#\-█.\]\[]{4,}:)', r"<br><br><b>\1</b>", text)
 
     #strikethrough text when inside ~~
     text = re.sub(r"~~([^~]*)~~", r"<s>\1</s>", text)
