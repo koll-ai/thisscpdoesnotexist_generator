@@ -43,11 +43,11 @@ def generate_scp(scp_number, description, object_class):
              + 'Item #: ' + 'SCP-' + scp_number + '\n\n' \
              + 'Object Class: ' + object_class
              
-    desc_field = req_complete(prompt + '\n\nDescription:', 500, stops=['\nSpecial Containment Procedures:', '\nDescription:', '\nAddendum', '\nRecovery:'])
+    desc_field = req_complete(prompt + '\n\nDescription:', 700, stops=['\nSpecial Containment Procedures:', '\nDescription:', '\nAddendum', '\nRecovery:'])
     if getSafetyLabel(desc_field) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    proc_field = req_complete(prompt + '\n\nDescription:' + desc_field + "\n\nSpecial Containment Procedures:", 500, temp=0.3)
+    proc_field = req_complete(prompt + '\n\nDescription:' + desc_field + "\n\nSpecial Containment Procedures:", 300, temp=0.3)
     if getSafetyLabel(proc_field) == 2:
         return ERROR_UNSAFE_CONTENT
 
