@@ -14,7 +14,7 @@ def connect():
     print("connected to openAI")
 
 
-def req_complete(prompt, max_tokens, temp=0.45, stops = ['\nItem #:', '\nDescription:', '\nAddendum', '\nRecovery:']):
+def req_complete(prompt, max_tokens, temp=0.45, stops = ['\nItem #:', '\nAddendum']):
     text = openai.Completion.create(
         engine="davinci",
         prompt=prompt,
@@ -42,17 +42,16 @@ def generate_scp(scp_number, description, object_class):
     prompt = 'SCP-' + str(scp_number) + ' is ' + description + '\n\n' \
              + 'Item #: ' + 'SCP-' + scp_number + '\n\n' \
              + 'Object Class: ' + object_class
-             
-    desc_field = req_complete(prompt + '\n\nDescription:', 700, stops=['\nSpecial Containment Procedures:', '\nDescription:', '\nAddendum', '\nRecovery:'])
+    
+    prompt += '\n\n' + 'Description:'
+    desc_field = req_complete(prompt, 700, stops=['\nSpecial Containment Procedures:', '\nAddendum', '\nRecovery:', '\nItem #:'])
     if getSafetyLabel(desc_field) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    proc_field = req_complete(prompt + '\n\nDescription:' + desc_field + "\n\nSpecial Containment Procedures:", 300, temp=0.3, stops=['Click here', '\nDescription:', '\nAddendum', '\nRecovery:'])
+    prompt += '\n\n' + 'Special Containment Procedures:'
+    proc_field = req_complete(prompt, 300, temp=0.3, stops=['Click here', '\nItem #:', '\nAddendum', '\nRecovery:'])
     if getSafetyLabel(proc_field) == 2:
         return ERROR_UNSAFE_CONTENT
-
-    prompt += "\n\nSpecial Containment Procedures:" + proc_field
-    prompt += "\n\nDescription:" + desc_field
 
     # prompt += "\n\nRecovery:"
     # ret = req_complete(prompt, 200, temp=0.5)
