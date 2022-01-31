@@ -55,16 +55,16 @@ def generate_scp(scp_number, description, object_class):
     prompt += "\n\nDescription:" + desc_field
 
     prompt += "\n\nRecovery:"
-    ret = req_complete(prompt, 200, temp=0.6)
+    ret = req_complete(prompt, 200, temp=0.5)
     if getSafetyLabel(ret) == 2:
         return ERROR_UNSAFE_CONTENT
     prompt += ret
 
-    addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".1: \n Interview ", 900)
+    addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".1: Interview ", 900)
     if getSafetyLabel(addendum1) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    addendum2 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".2: \n Test Log ", 900)
+    addendum2 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".2: Test Log ", 900)
     if getSafetyLabel(addendum2) == 2:
         return ERROR_UNSAFE_CONTENT
 
@@ -140,13 +140,13 @@ def toHTML(text):
     # termes insérés <=> toujous présents
     for s in ["Item #:", "Object Class:", "Special Containment Procedures:", "Description:", "Recovery:"]:
         text = re.sub(r"" + s, r"<h3>" + s + "</h3>", text)
-    text = re.sub(r'Addendum ?(\d*)\.([^\d]*)(\d):', r"<h3>Addendum \1.\3 :</h3>", text)
+    text = re.sub(r'Addendum ?(\d*)\.([^\d]*)(\d): ', r"<h3>Addendum \1.\3 : </h3>", text)
 
     # first line of the interview format
     text = re.sub(r'Interviewed:([^\n]*?)Interviewer:([^\n]*?)(<Begin Log>|Foreword:)', r"<b>Interviewed: \1</b> <b>Interviewer: \2</b> <br> \3", text)
 
     # mot avant ":" saut de ligne et en gras pendant les interviews
-    text = re.sub(r'([0-9A-Za-z#\-█.\]\[ ]{4,}:)', r"\n\n<b>\1</b>", text)
+    text = re.sub(r'([0-9A-Za-z#\-█.\]\[ ]{4,}: )', r"\n\n<b>\1</b>", text)
 
     #strikethrough text when inside ~~
     text = re.sub(r"~~([^~]*)~~", r"<s>\1</s>", text)
