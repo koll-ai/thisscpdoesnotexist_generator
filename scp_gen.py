@@ -54,22 +54,27 @@ def generate_scp(scp_number, description, object_class):
     prompt += "\n\nSpecial Containment Procedures:" + proc_field
     prompt += "\n\nDescription:" + desc_field
 
-    prompt += "\n\nRecovery:"
-    ret = req_complete(prompt, 200, temp=0.5)
-    if getSafetyLabel(ret) == 2:
-        return ERROR_UNSAFE_CONTENT
-    prompt += ret
+    # prompt += "\n\nRecovery:"
+    # ret = req_complete(prompt, 200, temp=0.5)
+    # if getSafetyLabel(ret) == 2:
+    #     return ERROR_UNSAFE_CONTENT
+    # prompt += ret
 
-    addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".1: Interview ", 900)
+    addendum0 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".1: ", 900)
+    if getSafetyLabel(addendum0) == 2:
+        return ERROR_UNSAFE_CONTENT
+    prompt += "\n\nAddendum " + str(scp_number) + ".1: " + addendum0
+
+    addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".2: Interview with ", 900)
     if getSafetyLabel(addendum1) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    addendum2 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".2: Experiment Log ", 900)
+    addendum2 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".3: Experiment Log ", 900)
     if getSafetyLabel(addendum2) == 2:
         return ERROR_UNSAFE_CONTENT
 
-    prompt += "\n\nAddendum " + str(scp_number) + ".1: Interview with " + addendum1
-    prompt += "\n\nAddendum " + str(scp_number) + ".2: Experiment Log " + addendum2
+    prompt += "\n\nAddendum " + str(scp_number) + ".2: Interview with " + addendum1
+    prompt += "\n\nAddendum " + str(scp_number) + ".3: Experiment Log " + addendum2
 
     return prompt
 
