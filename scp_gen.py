@@ -17,13 +17,13 @@ def connect():
 def req_complete(prompt, max_tokens, temp=0.45, stops = ['\nItem #:', '\nAddendum']):
     try:
         text = openai.Completion.create(
-            engine="davinci",
+            engine="text-davinci-003",
             prompt=prompt,
             temperature=temp,
             max_tokens=max_tokens,
             top_p=1.0,
             frequency_penalty=1.0,
-            presence_penalty=0.0,
+            presence_penalty=0.5,
             stop=stops,
             user=username
         )["choices"][0]["text"]
