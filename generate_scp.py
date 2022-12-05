@@ -57,8 +57,8 @@ print('RAW SCP :')
 print(scp)
 print('END raw SCP')
 
-with open("last_raw.txt", "w") as f:
-    f.write(scp)
+#with open("last_raw.txt", "w") as f:
+#    f.write(scp)
 
 scp = scp_gen.toHTML(scp)
 
