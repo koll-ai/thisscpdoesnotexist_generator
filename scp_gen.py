@@ -12,8 +12,7 @@ object_classes = ['Safe', 'Euclid', 'Keter', 'Thaumiel']
 username = "-1"
 
 def connect():
-    #key = open("openai.key", "r").read().rstrip()
-    key = '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'
+    key = open("openai.key", "r").read().rstrip()
     openai.api_key = key
     print("connected to openAI")
 
