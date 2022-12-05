@@ -167,12 +167,12 @@ def toHTML(scp):
     text = "<div class='justifier'>" \
     + htmlscp['prompt'] \
     + "<h3> Item #: </h3> SCP-" + scp['item_n'] \
-    + "<h3> Object Class: </h3>" + scp['class'] \
-    + "<h3> Description: </h3>" + htmlscp['description'] \
-    + "<h3> Special Containment Procedures: </h3>" + htmlscp['procedures'] \
-    + "<h3> Addendum " + scp['item_n'] + ".1: </h3>" + htmlscp['addendum0'] \
-    + "<h3> Addendum " + scp['item_n'] + ".2: </h3> Interview with" + htmlscp['addendum1'] \
-    + "<h3> Addendum " + scp['item_n'] + ".3: </h3> Experiment Log" + htmlscp['addendum2'] \
+    + "<br><br><h3> Object Class: </h3>" + scp['class'] \
+    + "<br><br><h3> Description: </h3>" + htmlscp['description'] \
+    + "<br><br><h3> Special Containment Procedures: </h3>" + htmlscp['procedures'] \
+    + "<br><br><h3> Addendum " + scp['item_n'] + ".1: </h3>" + htmlscp['addendum0'] \
+    + "<br><br><h3> Addendum " + scp['item_n'] + ".2: </h3> Interview with" + htmlscp['addendum1'] \
+    + "<br><br><h3> Addendum " + scp['item_n'] + ".3: </h3> Experiment Log" + htmlscp['addendum2'] \
     + "</div>"
 
     text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
