@@ -5,11 +5,15 @@ import time
 
 ERROR_UNSAFE_CONTENT = "Error: unsafe content detected"
 
+class NSFWContentException(Exception):
+    pass
+
 object_classes = ['Safe', 'Euclid', 'Keter', 'Thaumiel']
 username = "-1"
 
 def connect():
-    key = open("openai.key", "r").read().rstrip()
+    #key = open("openai.key", "r").read().rstrip()
+    key = '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'
     openai.api_key = key
     print("connected to openAI")
 
@@ -23,13 +27,16 @@ def req_complete(prompt, max_tokens, temp=0.45, stops = ['\nItem #:', '\nAddendu
             max_tokens=max_tokens,
             top_p=1.0,
             frequency_penalty=1.0,
-            presence_penalty=0.5,
+            presence_penalty=0.45,
             stop=stops,
             user=username
         )["choices"][0]["text"]
     except openai.error.InvalidRequestError as e:
         print(e)
         text = ""
+
+    if getSafetyLabel(text) == 2:
+        raise Exception('nsfw content')
 
     return text
 
@@ -39,76 +46,55 @@ def remove_last_sentence(s):
 
 
 def generate_scp(scp_number, description, object_class):
-    # get current hour from time module
-    global username
-    username = str(int(time.time() / 3600))
+    try:
+        # get current hour from time module
+        global username
+        username = str(int(time.time() / 3600))
 
-    prompt = 'SCP-' + str(scp_number) + ' is ' + description + '\n\n' \
-             + 'Item #: ' + 'SCP-' + scp_number + '\n\n' \
-             + 'Object Class: ' + object_class
-    
-    input = prompt + '\n\n' + 'Description:'
-    desc_field = req_complete(input, 500, stops=['\nSpecial Containment Procedures:', '\nAddendum', '\nDescription:', '\nItem #:'])
-    if getSafetyLabel(desc_field) == 2:
+        scp = {}
+        
+        scp["prompt"] = 'SCP-' + str(scp_number) + ' is ' + description
+        
+        scp['item_n'] = str(scp_number)
+
+        scp['class'] = object_class
+
+        start_input = scp['prompt'] \
+        + '\n\nItem #: SCP-' + scp['item_n'] \
+        + '\n\nObject Class: ' + scp['class']
+
+        input = start_input + '\n\nDescription:'
+        scp['description'] = req_complete(input, 900, stops=['\nSpecial Containment Procedures:', '\nAddendum', '\nDescription:', '\nItem #:'])
+
+        input = start_input + '\n\n' + 'Description:' + scp['description'] + '\n\n' + 'Special Containment Procedures:'
+        scp['procedures'] = req_complete(input, 150, temp=0.3, stops=['Click here', '\nItem #:', '\nAddendum', '\nDescription:'])
+
+        input = start_input \
+        + '\n\nSpecial Containment Procedures:' + scp['procedures'] \
+        + '\n\nDescription:' + scp['description'] \
+        + "\n\nAddendum " + str(scp_number) + ".1:"
+        scp['addendum0'] = req_complete(input, 900, stops=['Click here', '\nItem #:', '\nAddendum', '\nDescription:'])
+        
+        input = start_input \
+        + '\n\nSpecial Containment Procedures:' + scp['procedures'] \
+        + '\n\nDescription:' + scp['description'] \
+        + "\n\nAddendum " + str(scp_number) + ".2: Interview with"
+        scp['addendum1'] = req_complete(input, 150, stops=['Click here', '\nItem #:', '\nAddendum', '\nDescription:'])
+        scp['addendum1'] += req_complete(input + scp['addendum1'], 150, stops=['Click here', '\nItem #:', '\nAddendum', '\nDescription:'])
+        scp['addendum1'] += req_complete(input + scp['addendum1'], 150, stops=['Click here', '\nItem #:', '\nAddendum', '\nDescription:'])
+        scp['addendum1'] += req_complete(input + scp['addendum1'], 150, stops=['Click here', '\nItem #:', '\nAddendum', '\nDescription:'])
+        scp['addendum1'] += req_complete(input + scp['addendum1'], 150, stops=['Click here', '\nItem #:', '\nAddendum', '\nDescription:'])
+
+        input = start_input \
+        + '\n\nSpecial Containment Procedures:' + scp['procedures'] \
+        + '\n\nDescription:' + scp['description'] \
+        + "\n\nAddendum " + str(scp_number) + ".3: Experiment Log"
+        scp['addendum2'] = req_complete(input, 900, stops=['Click here', '\nItem #:', '\nAddendum', '\nDescription:'])
+
+        return scp
+
+    except NSFWContentException:
         return ERROR_UNSAFE_CONTENT
-
-    input = prompt + '\n\n' + 'Description:' + desc_field + '\n\n' + 'Special Containment Procedures:'
-    proc_field = req_complete(input, 150, temp=0.3, stops=['Click here', '\nItem #:', '\nAddendum', '\nDescription:'])
-    if getSafetyLabel(proc_field) == 2:
-        return ERROR_UNSAFE_CONTENT
-
-    prompt += '\n\n' + 'Special Containment Procedures:' + proc_field
-    prompt += '\n\n' + 'Description:' + desc_field
-
-    # prompt += "\n\nRecovery:"
-    # ret = req_complete(prompt, 200, temp=0.5)
-    # if getSafetyLabel(ret) == 2:
-    #     return ERROR_UNSAFE_CONTENT
-    # prompt += ret
-
-    addendum0 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".1: ", 900)
-    if getSafetyLabel(addendum0) == 2:
-        return ERROR_UNSAFE_CONTENT
-
-    #Addendum 1
-    if len(addendum0) == 0:
-        addendum0 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".1: ", 900)
-        if getSafetyLabel(addendum0) == 2:
-            return ERROR_UNSAFE_CONTENT
-        if len(addendum0) > 0:
-            prompt += "\n\nAddendum " + str(scp_number) + ".1: " + addendum0
-    else:
-        prompt += "\n\nAddendum " + str(scp_number) + ".1: " + addendum0
-
-    addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".2: Interview with ", 900)
-    if getSafetyLabel(addendum1) == 2:
-        return ERROR_UNSAFE_CONTENT
-
-    addendum2 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".3: Experiment Log :", 900)
-    if getSafetyLabel(addendum2) == 2:
-        return ERROR_UNSAFE_CONTENT
-
-    #Addendum 2
-    if len(addendum1) == 0:
-        addendum1 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".2: Interview with ", 900)
-        if getSafetyLabel(addendum1) == 2:
-            return ERROR_UNSAFE_CONTENT
-        if len(addendum1) > 0:
-            prompt += "\n\nAddendum " + str(scp_number) + ".2: Interview with " + addendum1
-    else:
-        prompt += "\n\nAddendum " + str(scp_number) + ".2: Interview with " + addendum1
-
-    #Addendum 3
-    if len(addendum2) == 0:
-        addendum2 = req_complete(prompt + "\n\nAddendum " + str(scp_number) + ".3: Experiment Log :", 900)
-        if getSafetyLabel(addendum2) == 2:
-            return ERROR_UNSAFE_CONTENT
-        if len(addendum2) > 0:
-            prompt += "\n\nAddendum " + str(scp_number) + ".3: Experiment Log :" + addendum2
-    else:
-        prompt += "\n\nAddendum " + str(scp_number) + ".3: Experiment Log " + addendum2
-
-    return prompt
 
 
 def getSafetyLabel(text):
@@ -167,48 +153,63 @@ def getSafetyLabel(text):
     return output_label
 
 
-def toHTML(text):
-    split = text.split('\n', 1)
-    text = "<center> <h3> <i>" + split[0] + "</i> </h3> </center>" + split[1]
+def toHTML(scp):
+    htmlscp = {}
+
+    for k in scp.keys():
+        htmlscp[k] = global_formating(scp[k])
+
+    htmlscp['prompt'] = "<center> <h3> <i>" + scp['prompt'] + "</i> </h3> </center>"
+
+    htmlscp['addendum0'] = addendum_formating(htmlscp['addendum0'])
+    htmlscp['addendum1'] = interview_formating(htmlscp['addendum1'])
+    htmlscp['addendum2'] = addendum_formating(htmlscp['addendum2'])
+
+    text = "<div class='justifier'>" \
+    + htmlscp['prompt'] \
+    + "<h3> Item #: </h3> SCP-" + scp['item_n'] \
+    + "<h3> Object Class: </h3>" + scp['class'] \
+    + "<h3> Description: </h3>" + htmlscp['description'] \
+    + "<h3> Special Containment Procedures: </h3>" + htmlscp['procedures'] \
+    + "<h3> Addendum " + scp['item_n'] + ".1: </h3>" + htmlscp['addendum0'] \
+    + "<h3> Addendum " + scp['item_n'] + ".2: </h3> Interview with" + htmlscp['addendum1'] \
+    + "<h3> Addendum " + scp['item_n'] + ".3: </h3> Experiment Log" + htmlscp['addendum2'] \
+    + "</div>"
+
+    text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
+
+    return text
+
+def global_formating(text):
+    #brackets to html
+    text = re.sub(r'<', r'&lt', text)
+    text = re.sub(r'>', r'&gt', text)
 
     # entre guillemmets en italique
     text = re.sub(r'"([^"]*)"', r'<i>"\1"</i>', text)
-
     text = re.sub(r'\s:', r':', text)
-
-    # termes insérés <=> toujous présents
-    #? maybe add exception for Experiment #:
-    for s in ["Item #:", "Object Class:", "Special Containment Procedures:", "Description:", "Recovery:"]:
-        text = re.sub(r"" + s, r"<h3>" + s + "</h3>", text)
-    text = re.sub(r'Addendum ?(\d*)\.([^\d]*)(\d): ', r"<h3>Addendum \1.\3 : </h3>", text)
-
-    # first line of the interview format
-    text = re.sub(r'Interviewed:([^\n]*?)Interviewer:([^\n]*?)(<Begin Log>|Foreword:)', r"<b>Interviewed: \1</b> <b>Interviewer: \2</b> <br> \3", text)
-
-    # mot avant ":" saut de ligne et en gras pendant les interviews
-    text = re.sub(r'([0-9A-Za-z#\-█.\]\[_]{4,}: )', r"\n\n<b>\1</b>", text)
-    text = re.sub(r'(Dr.|Mr.|Mme.|Ms.) \n\n<b>([^<]+)</b>', r"\n\n<b>\1 \2</b>", text)
-    text = re.sub(r'Closing \n\n<b>Statement:</b>', r"\n\n<b>Closing Statement</b>", text)
-
+    
     #strikethrough text when inside ~~
     text = re.sub(r"~~([^~]*)~~", r"<s>\1</s>", text)
-
-    #block quote
-    # text = re.sub(r'<Begin Log>', r"<Begin Log><blockquote class='blockquote'>", text)
-    # text = re.sub(r'<End Log>', r"</blockquote><End Log>", text)
-
-    # escape html brackets
-    text = re.sub(r"<Begin Log>", r"\n\n&lt;Begin Log&gt\n\n", text)
-    text = re.sub(r"<End Log>", r"\n\n&lt;End Log&gt\n\n", text)
 
     # nom du scp en italique
     text = re.sub(r"SCP\-([0-9]+)", r"<i>SCP-\1</i>", text)
 
-    text = re.sub(r"\n+<([^>]*)>\n+", r"\n\n<\1>", text)
     text = re.sub(r"\n", r"<br>", text)
     text = re.sub(r"( *<br> *){3,}", r"<br><br>", text)
 
-    text = "<div class='justifier'>" + text + "</div>"
-    text = "<style>.justifier {  text-align: justify;  text-justify: inter-word;}</style>" + text
+    # names before : will be bold and on a new line
+    text = re.sub(r'<br>([^:]{,30}:)', r"<br><b>\1</b>", text)
+
+    return text
+
+def interview_formating(text):
+    text = re.sub(r'Interviewed:([^\n]*?)Interviewer:([^\n]*?)(<Begin Log>|Foreword:)', r"<b>Interviewed: \1</b> <b>Interviewer: \2</b> <br> \3", text)
+    return text
+
+def addendum_formating(text):
+    # escape html brackets
+    text = re.sub(r"<Begin Log>", r"\n\n&lt;Begin Log&gt\n\n", text)
+    text = re.sub(r"<End Log>", r"\n\n&lt;End Log&gt\n\n", text)
 
     return text
