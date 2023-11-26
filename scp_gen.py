@@ -28,7 +28,7 @@ def generate_scp(scp_num, scp_prompt, scp_class):
     user_prompt = f"Item #{scp_num}: {scp_prompt}, class: {scp_class}"
 
     messages = [
-        {"role": "system", "content": },
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": prompt},
     ]
 
