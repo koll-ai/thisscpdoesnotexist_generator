@@ -60,31 +60,35 @@ The experiment log should contain multiple expirements.
     pattern = r"### Description:\n(.*?)\n### Special Containment Procedures:"
     matches = re.search(pattern, scp_markdown, re.DOTALL)
     description = matches.group(1).strip()
+
     response = client.images.generate(
         model="dall-e-3",
-        prompt=f"Generate a picture for this SCP:\n{description}",
+        prompt=f"Generate a picture for this SCP:\n{description}", #TODO better prompt engineering for this part
         size="1792x1024",
         quality="hd",
         n=1,
     )
+
     try:
         image_url = response.data[0].url
         print(image_url)
         pattern_to_insert_image = r"(### Object Class: .*\n)"
-        scp_markdown = re.sub(pattern_to_insert_image, r"\1\n![AI SCP Image](" + image_url + ")\n", scp_markdown, count=1)
+        scp_markdown = re.sub(pattern_to_insert_image, f"""
+            <img class="scp-image" src="{image_url}" alt="Illustration of SCP-{scp_num}" />
+        """, scp_markdown, count=1)
     except:
-        print("No image generated")
+        scp_markdown = re.sub(pattern_to_insert_image, f"""
+            <img class="scp-image" src="medias/404.jpg" alt="Illustration of SCP-{scp_num}" />
+        """, scp_markdown, count=1)
 
     scp_html = markdown(scp_markdown)
-    scp_html = """
-    <style>
-        .justifier {text-align: justify; text-justify: inter-word;}
-        img{width: 100%;}
-    </style>
+    
+    return f"""
+    <div class="justifytext">
 
-    <div class="justifier">
-    """ + f"""
     <center> <h3> SCP-{scp_num} is {scp_prompt} </h3> </center>
-    """ + scp_html + "</div>"
 
-    return scp_html
+    {scp_html}
+
+    </div>
+    """
