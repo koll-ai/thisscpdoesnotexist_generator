@@ -60,8 +60,6 @@ print('END raw SCP')
 #with open("last_raw.txt", "w") as f:
 #    f.write(scp)
 
-scp = scp_gen.toHTML(scp)
-
 # save scp
 filename = 'SCP-' + scp_num + '-GPT.txt'
 with open("../SCP_BDD/" + filename, 'w+') as f:
