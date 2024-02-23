@@ -81,7 +81,7 @@ The experiment log should contain multiple expirements.
         image_url = response.data[0].url
 
         save_url = f"{IMAGE_FOLDER}/SCP-{scp_num}-GPT.png"
-        api_url = f"{API_URL}/SCP-{scp_num}-GPT.png"
+        api_url = f"{API_URL}/images/SCP-{scp_num}-GPT.png"
         
         response= requests.get(image_url)
         if response.status_code == 200:
