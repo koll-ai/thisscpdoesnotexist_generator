@@ -5,6 +5,7 @@ import csv
 import openai
 import json
 
+
 with open("./polling_api.key", "r") as f:
     NEXT_ROUND_KEY = f.read().rstrip()
 

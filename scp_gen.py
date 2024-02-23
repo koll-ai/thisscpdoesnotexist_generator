@@ -5,7 +5,13 @@ import time
 import sys
 import re
 import os
+import requests
+from dotenv import load_dotenv
 
+load_dotenv()
+
+IMAGE_FOLDER = os.getenv("IMAGE_FOLDER")
+API_URL = os.getenv("API_URL")
 
 def connect():
     key = open("openai.key", "r").read().rstrip()
@@ -69,19 +75,29 @@ The experiment log should contain multiple expirements.
         n=1,
     )
 
+    image_tag = ""
+
     try:
         image_url = response.data[0].url
-        print(image_url)
-        pattern_to_insert_image = r"(### Object Class: .*\n)"
-        scp_markdown = re.sub(pattern_to_insert_image, f"""
-            <img class="scp-image" src="{image_url}" alt="Illustration of SCP-{scp_num}" />
-        """, scp_markdown, count=1)
+
+        save_url = f"{IMAGE_FOLDER}/SCP-{scp_num}-GPT.png"
+        api_url = f"{API_URL}/SCP-{scp_num}-GPT.png"
+        
+        response= requests.get(image_url)
+        if response.status_code == 200:
+            with open(save_url, 'wb') as file:
+                file.write(response.content)
+
+        image_tag = f"""
+            <img class="scp-image" src="{api_url}" alt="Illustration of SCP-{scp_num}" />
+        """
     except:
-        scp_markdown = re.sub(pattern_to_insert_image, f"""
-            <img class="scp-image" src="medias/404.jpg" alt="Illustration of SCP-{scp_num}" />
-        """, scp_markdown, count=1)
+        image_tag = f"""
+            <img class="scp-image" src="{api_url}" alt="Illustration of SCP-{scp_num}" />
+        """
 
     scp_html = markdown(scp_markdown)
+    scp_html = re.sub(r"(<h3>Object Class: .*</h3>)", image_tag, scp_html, count=1)
     
     return f"""
     <div class="justifytext">
