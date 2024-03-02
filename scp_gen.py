@@ -32,18 +32,7 @@ The chapter titles are:
     - "###Description:"
     - "###Special Containment Procedures:"
     - "###Addendum 1:", "###Addendum 2:", etc. 
-There are 7-10 addenda, each with a different title and content.
 An addendum can contain multiple subsection to add depth and narrative value
-An addendum can be one of the following types:
-
-General Information: This type often includes supplementary information that doesn't fit into the initial description or containment procedures, such as historical background, discovery circumstances, or theoretical explanations.
-Incident Reports: These addenda detail specific incidents involving the SCP, such as containment breaches, accidents during testing, or unusual activities observed. They often serve to illustrate the SCP's capabilities or the risks it poses.
-Experiment Logs: This type focuses on the documentation of experiments conducted on or with the SCP. These logs can reveal the SCP's properties, effects, and potential applications or dangers.
-Interview Logs: Interviews with the SCP (if it's sentient), witnesses, or individuals affected by the SCP are included here. These addenda provide personal insights and firsthand accounts that contribute to the narrative depth.
-Recovery Logs: Details regarding the SCP's recovery, including the location, conditions of discovery, and any initial containment efforts, are documented here. This can also include information on any entities or organizations previously in possession of the SCP.
-Updates: Sometimes, changes in containment procedures, status updates, or significant new information about the SCP are added in this form of addendum, ensuring the documentation remains current.
-Miscellaneous:Any other relevant information that doesn't fit into the above categories but is deemed necessary for understanding the SCP or its containment falls here. This can include legal documents, external correspondence, or theoretical essays.
-
 The experiment log should contain multiple expirements.
 """
 
